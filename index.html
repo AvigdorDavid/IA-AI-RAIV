@@ -49,7 +49,6 @@
 <!--
 COMMENTED OUT UNTIL FULLY DONE
 AGENT CARDS
-
 <img id="MilitaryMight" src="files/ImpClass/MilitaryMight.jpg" width="175" height="298" onclick="MMsel()"></img>
 <img id="SubversiveTactics" src="files/ImpClass/SubversiveTactics.jpg" width="175" height="298" onclick="STsel()"></img>
 <img id="TechnologicalSuperiority" src="files/ImpClass/TechnologicalSuperiority.jpg" width="175" height="298" onclick="TSsel()"></img>
@@ -71,21 +70,21 @@ AGENT CARDS
 		<td>
 			<div id="blitz" class="col">
 				<div class="shaded">
-					<h3 class="title center"> Drawn Event Card: </h3>
+					<h3 class="title center"> Drawn Automated Emperor/Blitz Card: </h3>
 				</div>
 				<br>
 				<div class="buttonCenter">
 					<form id="blitzDraw" action="#" method="post" onsubmit="return false">
-						<button onClick="displayBlitzCards()">Draw Event Card</button>
-						<button onClick="shuffleBlitzCards()">Reshuffle Event deck</button>
+						<button onClick="displayBlitzCards()">Draw Automated Emperor Card</button>
+						<button onClick="shuffleBlitzCards()">Reshuffle Automated Emperor deck</button>
 					</form>
 				</div>
 
 				<p id="blitzShuffleStatus" class="center"></p>
 					<p class="center">
-						Adjust Agenda Cards (WILL RESHUFFLE DECK!!!) - Add one when Imperial loses a mission (starts at 1; applies every lost mission)
+						Adjust Blitz Cards (WILL RESHUFFLE DECK!!!) - Add one when Imperial loses a mission (applies every lost mission)
 					</p>
-				<p class="center"> Number of Agenda Cards: </p> 
+				<p class="center"> Current Blitz Level: </p> 
 				
 				<div class="buttonCenter">
 					<form id="blitzForm" action="#" method="post" onsubmit="return false">
@@ -240,21 +239,15 @@ AGENT CARDS
 </div>
 <!--
 COMMENTING THIS OUT UNTIL FULL DONE
-
 <div id="Imperial Class div">
-
 <h2>Selected Imperial Class</h2>
-
 <p id="selImpClass">None Selected</p>
-
 	<img id="IC1"></img><img id="IC2"></img><img id="IC3"></img><img id="IC4"></img><img id="IC5"></img><img id="IC6"></img><img id="IC7"></img><img id="IC8"></img><img id="IC9"></img>
-
 </div>
 -->
 
 <!--
 PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
-
 -->
 
 <div id="myModal" class="modal">
@@ -1337,9 +1330,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 <!--END PULLOUTS-->
 
 <script type='text/javascript'>
-
 		//MESS AHEAD! Should've started it modular. TODO
-
 		//SETUP
 		//MESS OF VARS
 		
@@ -1412,7 +1403,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 		//BLITZ DECK MANAGEMENT
 		//Starting number of cards
 		var blitzCardsInt = 2;
-
+		
 		function randomCardNumberDraw(min,max){
 			//param min: minimum number to random draw from
 			//type min: integer
@@ -1446,14 +1437,14 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 			blitzCardsDeckClone = shuffleArray(blitzCards.slice(0));
 			
 			for (var i=0, len=blitzCardsInt; i<blitzCardsInt; i++){
-			//17 cards to pick from, randomly picks one
+			//10 cards to pick from, randomly picks one
 				deck.push(blitzCardsDeckClone.pop());
 			}
 		
 		
 			//Load up blitz color focus cards
 			for (var i=0; i<blitzColors.length; i++){
-				for (var j=1; j<26; j++){
+				for (var j=1; j<7; j++){
 					deck.push(String(blitzColors[i]) + " " + String(j));
 				}
 			}
@@ -1507,7 +1498,6 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 			img.width = width;
 			img.height = height;
 			img.alt = alt;
-
 			// This next line will just add it to the <body> tag
 			document.body.appendChild(img);
 		}
@@ -1528,7 +1518,6 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 			img.width = width;
 			img.height = height;
 			img.alt = alt;
-
 			// This next line will just add it to the <body> tag
 			document.getElementById('deployImgDiv').appendChild(img);
 		}
@@ -1550,9 +1539,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 			img.width = width;
 			img.height = height;
 			img.alt = alt;
-
 		}
-
 		function clearBox(elementID) {
 			//param elementID: element id to be cleared
 			//type elementID: string
@@ -1974,7 +1961,6 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 		
 		//Adds expacs 3 threat deployment cards
 		function addDeployNonCore3Threat(){
-
 		
 		}
 		
@@ -2013,7 +1999,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 			deck = savedBlitzDeck.slice(0);
 			//HIDING LINE USED FOR DEBUG
 			//document.getElementById('demo').innerHTML = deck;
-			document.getElementById('blitzShuffleStatus').innerHTML = "Event cards Shuffled!";
+			document.getElementById('blitzShuffleStatus').innerHTML = "AE cards Shuffled!";
 		}
 		
 		function blitzInc(){
@@ -2029,7 +2015,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 		function blitzDec(){
 			//returns: decrease the blitz threat level
 			//Did not know javascript takes +=, too late now.
-			if (blitzCardsInt > 2{
+			if (blitzCardsInt > 2){
 				blitzCardsInt = blitzCardsInt - 1;
 				blitzReadjust();
 			}
@@ -2049,13 +2035,12 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 			for (var i=0; i<blitzCardsInt; i++){
 			//10 cards to pick from, randomly picks one
 				deck.push(blitzCardsDeckClone.pop());
-
 			}
 		
 		
 			//Load up blitz color focus cards; always same amount
 			for (var i=0; i<blitzColors.length; i++){
-				for (var j=1; j<26; j++){
+				for (var j=1; j<7; j++){
 					deck.push(String(blitzColors[i]) + " " + String(j));
 				}
 			}
@@ -2138,52 +2123,41 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 		
 		// Get the modal
 		var modal = document.getElementById('myModal');
-
 		// Get the button that opens the modal
 		var btn = document.getElementById("myBtn");
-
 		// Get the <span> element that closes the modal
 		var span = document.getElementsByClassName("close")[0];
-
 		// When the user clicks on the button, open the modal 
 		btn.onclick = function() {
 			modal.style.display = "block";
 		}
-
 		// When the user clicks on <span> (x), close the modal
 		span.onclick = function() {
 			modal.style.display = "none";
 		}
-
 		// When the user clicks anywhere outside of the modal, close it
 		window.onclick = function(event) {
 			if (event.target == modal) {
 				modal.style.display = "none";
 			}
 		}
-
 		//END MODAL SECTION
 		//
 		
 		//Loadout Modal
 		var loadoutModal = document.getElementById('loadoutModal');
-
 		// Get the button that opens the modal
 		var loadoutBtn = document.getElementById("loadoutBtn");
-
 		// Get the <span> element that closes the modal
 		var loadoutSpan = document.getElementsByClassName("close")[1];
-
 		// When the user clicks on the button, open the modal 
 		loadoutBtn.onclick = function() {
 			loadoutModal.style.display = "block";
 		}
-
 		// When the user clicks on <span> (x), close the modal
 		loadoutSpan.onclick = function() {
 			loadoutModal.style.display = "none";
 		}
-
 		// When the user clicks anywhere outside of the modal, close it
 		window.onclick = function(event) {
 			if (event.target == loadoutModal) {
@@ -2299,7 +2273,6 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 					break;
 			}
 		}
-
 		function loadSkills(character, element){
 			//param character: character selected to load skills for
 			//type character: string
@@ -2313,7 +2286,6 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 				}
 			}
 		}
-
 		function selectPOne(){
 			//returns: sets player one skills
 			loadSkills(document.getElementById("charSelect1").value, document.getElementById("playerOneSkills"));
@@ -2321,23 +2293,18 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 		
 		//mission Modal
 		var missionModal = document.getElementById('missionModal');
-
 		// Get the button that opens the modal
 		var missionBtn = document.getElementById("missionBtn");
-
 		// Get the <span> element that closes the modal
 		var missionSpan = document.getElementsByClassName("close")[2];
-
 		// When the user clicks on the button, open the modal 
 		missionBtn.onclick = function() {
 			missionModal.style.display = "block";
 		}
-
 		// When the user clicks on <span> (x), close the modal
 		missionSpan.onclick = function() {
 			missionModal.style.display = "none";
 		}
-
 		// When the user clicks anywhere outside of the modal, close it
 		window.onclick = function(event) {
 			if (event.target == missionModal) {
@@ -2349,23 +2316,18 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 		
 		//Reference Modal
 		var referenceModal = document.getElementById('referenceModal');
-
 		// Get the button that opens the modal
 		var referenceBtn = document.getElementById("referenceBtn");
-
 		// Get the <span> element that closes the modal
 		var referenceSpan = document.getElementsByClassName("close")[3];
-
 		// When the user clicks on the button, open the modal 
 		referenceBtn.onclick = function() {
 			referenceModal.style.display = "block";
 		}
-
 		// When the user clicks on <span> (x), close the modal
 		referenceSpan.onclick = function() {
 			referenceModal.style.display = "none";
 		}
-
 		// When the user clicks anywhere outside of the modal, close it
 		window.onclick = function(event) {
 			if (event.target == referenceModal) {
