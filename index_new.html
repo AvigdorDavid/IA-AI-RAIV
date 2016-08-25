@@ -1336,7 +1336,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 		
 		//blitz cards filenames
 		var blitzCards = ["Blitz 1","Blitz 2","Blitz 3","Blitz 4","Blitz 5", "Blitz 6","Blitz 7","Blitz 8","Blitz 9","Blitz 10"];
-		var blitzColors = ["Blue", "Gold", "Green", "Red"];
+		var blitzColors = ["Event"];
 		//Include multiples if multiple in set
 		//deployment card sets
 		var coreImpBelow6Standard = ["ProbeDroid","ProbeDroid","Stormtrooper","Stormtrooper","ImpOfficer","ImpOfficer","EWebEngi","ELImpOfficer","ELProbeDroid"];
@@ -1985,7 +1985,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 			//if so, top card is popped and displayed
 			if (deck[0]){
 				var poppedItem = String(deck.pop());
-				var imgSrc = "files/AE/" + poppedItem + ".jpg";
+				var imgSrc = "files/Event/" + poppedItem + ".jpg";
 				//HIDING DISPLAY LINE FOR DEBUG
 				//document.getElementById('demo').innerHTML = deck;
 				replace_image(imgSrc, 335, 523, imgSrc, "currentBlitzImg");
