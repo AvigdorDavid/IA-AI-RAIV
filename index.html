@@ -1,0 +1,2342 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Automated Emperor</title>
+	<link rel="stylesheet" type="text/css" href="stylesheets/styles.css" />
+	<link rel="icon" href="files/Threat.png" />
+	<meta name="viewport" content="width=device-width">
+</head>
+<body onload="pageLoad()">
+    <!-- Wrapper div for alignment
+    -->
+	<div id="shortInstructions" class="shaded center">
+	<h3>
+	Read the instructions <img src="files/itemIcons/Help.png" class="intro-icons" alt="instructions icon">. 
+	Set loadouts <img src="files/itemIcons/Ranged.png" class="intro-icons" alt="loadout icon">.
+	Choose a mission <img src="files/itemIcons/Mission.png" class="intro-icons" alt="mission icon">.
+	</h3>
+	</div>
+	<div id="counters">
+		<table>
+			<tr>
+				<td>
+					<div class="buttonCenter" id="threatCounterDiv">
+						<p>
+							<span>Imperial Threat Counter
+							</span>
+						</p>
+						<button onClick="threatCounterDec()">-</button>
+						<span id ="threatCounterIntText" class="IAfont large green">0</span>
+						<button onClick="threatCounterInc()">+</button>
+					</div>
+				</td>
+				<td>
+					<div class="buttonCenter" id="influenceCounterDiv">
+						<p>
+							<span>Imperial Influence Counter
+							</span>
+						</p>
+						<button onClick="influenceCounterDec()">-</button>
+						<span id ="influenceCounterIntText" class="IAfont large green">0</span>
+						<button onClick="influenceCounterInc()">+</button>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+
+<!--
+COMMENTED OUT UNTIL FULLY DONE
+AGENT CARDS
+<img id="MilitaryMight" src="files/ImpClass/MilitaryMight.jpg" width="175" height="298" onclick="MMsel()"></img>
+<img id="SubversiveTactics" src="files/ImpClass/SubversiveTactics.jpg" width="175" height="298" onclick="STsel()"></img>
+<img id="TechnologicalSuperiority" src="files/ImpClass/TechnologicalSuperiority.jpg" width="175" height="298" onclick="TSsel()"></img>
+-->
+<table id="blitzMissionSection" class="padded fillWidth divTable stack">
+	<!--Second Split section -->
+	<tr>
+		<td>
+			<div id="missionStaging" class="col">
+				<div class="shaded">
+					<h3 class="center">Current Mission:</h3>
+				</div>
+					<p class="center">Click card to flip
+					</p>
+				<br>
+				<img id="missionFront" class="center" onClick="missionFlip()" alt="mission card">
+			</div>
+		</td>
+		<td>
+			<div id="blitz" class="col">
+				<div class="shaded">
+					<h3 class="title center"> Drawn Automated Emperor/Blitz Card: </h3>
+				</div>
+				<br>
+				<div class="buttonCenter">
+					<form id="blitzDraw" action="#" method="post" onsubmit="return false">
+						<button onClick="displayBlitzCards()">Draw Automated Emperor Card</button>
+						<button onClick="shuffleBlitzCards()">Reshuffle Automated Emperor deck</button>
+					</form>
+				</div>
+
+				<p id="blitzShuffleStatus" class="center"></p>
+					<p class="center">
+						Adjust Blitz Cards (WILL RESHUFFLE DECK!!!) - Add one when Imperial loses a mission (applies every lost mission)
+					</p>
+				<p class="center"> Current Blitz Level: </p> 
+				
+				<div class="buttonCenter">
+					<form id="blitzForm" action="#" method="post" onsubmit="return false">
+						<button onClick="blitzDec()">-</button>
+						<span id ="blitzLevelIntText" class="IAfont large"> </span>
+						<button onClick="blitzInc()">+</button>
+					</form>
+				</div>
+				<br>
+				<img id="currentBlitzImg" class="center" alt="Automated Emperor Card">
+			</div>
+		</td>
+	</tr>
+</table>
+
+<div class="tablewrapper">
+	<table id="deploymentAddon" class="padded fillWidth divTable stack">
+		<tr>
+			<td id="avp" class="options">
+				<div id="avpDiv" class="col">
+					<div class="shaded center">
+						<h3>Villain Packs Deployments (Reshuffle after selecting!)</h3>
+					</div>
+					<br>
+					<form id="expacoptions" action="#" method="post" onsubmit="return false">
+						<table id="avpTable" class="center internalnonstack">
+							<tr>
+								<td>
+									<input type="checkbox" name="AVPoption" id="AVPoption1" value="HiredGun">
+									<label for="AVPoption1">Hired Guns</label>
+								</td>
+								<td>
+									<input type="checkbox" name="AVPoption" id="AVPoption2" value="Stormtrooper">
+									<label for="AVPoption2">Stormtroopers</label>
+								</td>
+								<td>
+									<input type="checkbox" name="AVPoption" id="AVPoption3" value="BanthaRider">
+									<label for="AVPoption3">Bantha Rider</label>
+								</td>
+								<td>
+									<input type="checkbox" name="AVPoption" id="AVPoption4" value="ISBInfiltrator">
+									<label for="AVPoption4">ISB Infiltrators</label>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</td>
+			<td id="uniques">
+				<div id="rewardUniqueDiv" class="col">
+					<div class="shaded center">
+						<h3>Rewarded Uniques (Reshuffle after selecting!) </h3>
+					</div>
+					<br>
+					<form id="uniqueOptions" action="#" onsubmit="return false">
+						<table id="uniqueTable" class="center internalnonstack">
+							<tr>
+								<td>
+									<input type="checkbox" name="uniqueCheck" id="uniqueCheck1" value="DarthVader">
+									<label for="uniqueCheck1">Darth Vader</label>
+								</td>
+								<td>
+									<input type="checkbox" name="uniqueCheck" id="uniqueCheck2" value="ELGeneralWeiss">
+									<label for="uniqueCheck2">General Weiss</label>
+								</td>
+								<td>
+									<input type="checkbox" name="uniqueCheck" id="uniqueCheck3" value="ELRoyalGuardChamp">
+									<label for="uniqueCheck3">Royal Guard Champion</label>
+								</td>
+								<td>
+									<input type="checkbox" name="uniqueCheck" id="uniqueCheck4" value="ELIG88">
+									<label for="uniqueCheck4">IG-88</label>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="checkbox" name="uniqueCheck" id="uniqueCheck5" value="BobaFett">
+									<label for="uniqueCheck5">Boba Fett</label>
+								</td>
+								<td>
+									<input type="checkbox" name="uniqueCheck" id="uniqueCheck6" value="KaynSomos">
+									<label for="uniqueCheck6">Kayn Somos</label>
+								</td>
+								<td>
+									<input type="checkbox" name="uniqueCheck" id="uniqueCheck7" value="Dengar">
+									<label for="uniqueCheck7">Dengar</label>
+								</td>
+								<td>
+									<input type="checkbox" name="uniqueCheck" id="uniqueCheck8" value="General Sorin">
+									<label for="uniqueCheck8">General Sorin</label>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="checkbox" name="uniqueCheck" id="uniqueCheck9" value="AgentBlaiseC">
+									<label for="uniqueCheck9">Agent Blaise</label>
+								</td>
+								<td>
+									<input type="checkbox" name="uniqueCheck" id="uniqueCheck10" value="Greedo">
+									<label for="uniqueCheck10">Greedo</label>
+								</td>
+								<td>
+									<input type="checkbox" name="uniqueCheck" id="uniqueCheck11" value="TheGrandInquisitor">
+									<label for="uniqueCheck11">The Grand Inquisitor</label>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div id="Deployment">
+    <div class="mobilealign">
+		<div class="shaded">
+			<h2 class="center"> Drawn Deployment Card for OPEN GROUP: </h2>
+		</div>
+    </div>
+	<br>
+	<div class="center">
+		<form id="deploymentDisplayForm" action="#" method="post" onsubmit="return false">
+			<button onClick="displayDeploymentCards()">Draw deployment</button>
+			<button onClick="shuffleDeploymentCards()">Reshuffle deployment deck</button>
+		</form>
+	</div>
+	<br>
+	<p id="deployShuffleStatus" class="center"></p> 
+	<p class="center">
+		Adjust campaign threat level (WILL RESHUFFLE DECK!!!) 
+		<br>
+		Current Threat Level: 
+	</p> 
+	
+	<div class="center">
+		<form id="deploymentDiffForm" action="#" method="post" onsubmit="return false">
+			<button onClick="deploymentDec()">-</button>
+			<span id ="deployDiffInt" class="currentValues IAfont large"> </span>
+			<button onClick="deploymentInc()">+</button>
+		</form>
+	</div>
+	<br>
+	
+	<!--
+	Placeholder for image, when card is drawn
+	-->
+	<img id="deployImg" alt="deployment image">
+	
+	<div id="deployImgDiv">
+	</div>
+</div>
+<!--
+COMMENTING THIS OUT UNTIL FULL DONE
+<div id="Imperial Class div">
+<h2>Selected Imperial Class</h2>
+<p id="selImpClass">None Selected</p>
+	<img id="IC1"></img><img id="IC2"></img><img id="IC3"></img><img id="IC4"></img><img id="IC5"></img><img id="IC6"></img><img id="IC7"></img><img id="IC8"></img><img id="IC9"></img>
+</div>
+-->
+
+<!--
+PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
+-->
+
+<div id="myModal" class="modal">
+	<!-- Modal content -->
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="close large">&times;</span>
+				<h1>Instructions on using Automated Emperor</h1>
+			</div>
+				<div class="modal-body">
+					<div id="instructionsteps">
+						<div id="setup" class="setupDivClass">
+							<h2>Setup</h2>
+							<ol>
+								<li>Automated Emperor Deck
+									<ul>
+										<li>Set Blitz level (2 at beginning of campaign)</li>
+										<li>Start at 2 at campaign start, increase by one for each mission Imperials lose</li>
+										<li>When drawn, deployment group focuses on Priority Target, regardless of if they would assigned one by mission card </li>
+										<li>Secondary Target is closest Rebel figure with least health </li>
+										<li>Resolve actions in listed order on Blitz Cards</li>
+									</ul>
+								</li>
+								<li>Deployment Deck
+									<ul>
+										<li>Draw cards equal to indicated number of open groups noted on mission to form deployment hand</li>
+										<li>If no open groups, no cards are drawn</li>
+										<li>When deployment group is defeated, shuffle back into deployment hand</li>
+										<li>When given AE has an opportunity to resolve an optional deployment at mission start, deploy a card starting from top of 
+											deployment hand	if sufficient threat.</li>
+										<li>If insufficient threat, cycle through deployment hand until able to deploy a card.</li>
+									</ul>
+								</li>
+								<li>Threat Level
+									<ul>
+										<li>Increase threat level as noted in campaign</li>
+									</ul>
+								</li>
+								<li>Agenda Deck
+									<ul>
+										<li>Choose one card from each Agenda set that applies to time period</li>
+										<li>Draw top 6 cards to determine which agenda sets are used by AE</li>
+										<li>Shuffle all cards from chosen sets to form Agenda Deck</li>
+									</ul>
+								</li>
+								<li>Rebel Color Assignment
+									<ul>
+										<li>Assign each rebel character with a color of: Blue, Yellow, Green, Red</li>
+									</ul>
+								</li>
+								<li>Mission Cards
+									<ul>
+										<li>Select the mission being played</li>
+										<li>Follow instructions on green for setup</li>
+										<li>Mission cards will notify when to use red side</li>
+									</ul>
+								</li>
+								<li>Imperial Class Deck
+									<ul>
+										<li>Randomly select one of the class decks for AE to use</li>
+									</ul>
+								</li>
+							</ol>
+						</div>
+					</div>
+						<div id="Instructions">
+							<div id="ActivationPhase">
+								<h2>Activation Phase and Deployment Groups</h2>
+									<ul>
+										<li> During a round, AE activates deployment groups in order from left to right.</li>
+										<li> Figures are activated starting with one closest to a hero or priority target </li>
+									</ul>
+									<ol>
+										<li><h4>Automated Emperor Cards</h4>
+											<ul>
+												<li>An AE card is drawn whenever AE activates a deployment group</li>
+												<li>Follow actions on drawn card to determine actions</li>
+												<li>A card can also be drawn when needing to determine a target outside of figure activation</li>
+												<li>Hit reshuffle when all cards are drawn</li>
+											</ul>
+										</li>
+										<li><h4>Blitz Cards</h4>
+											<ul>
+												<li>Blitz cards are part of the AE deck</li>
+												<li>When drawn deployment group focuses on Imperial Priority Target, regardless of group being assigned a target by mission card</li>
+												<li>Closest rebel figure with least health is designated as secondary target</li>
+												<li>All figures in deployment group attempt to resolve actions in listed order on Blitz card</li>
+												<li>If drawn to determine a target outside figure activation, target will be the rebel figure with least health. Threat is still gained as indicated</li>
+											</ul>
+										</li>
+										<li><h4>Imperial Class Cards</h4>
+											<ul>
+												<li>Cards bought by AE are arranged left to right by point cost</li>
+												<li>They are played at FIRST valid opportunity, starting from the left</li>
+												<li>When a deployment card leaves play, return any attachments to Imperial Class hand</li>
+												<li>Attachments with abilities can be triggered when the corresponding figure resolves an <b>ABILITY</b> action on an AE card</li>
+												<li>Attachments are played when a new deployment card is played only if valid</li>
+												<li>Cards with threat cost are only played if AE has twice the required threat</li>
+											</ul>
+										</li>
+										<li><h4>Agenda Cards</h4>
+											<ul>
+												<li>Agenda Cards are also arranged left to right, and played at first valid opportunity</li>
+												<li>If card can be discarded <b>OR</b> returned to deck after being played, it is discarded</li>
+												<li>Side missions are played immediately</li>
+												<li>If there is a current Imperial side mission, new side missions are held in reserve until current mission is complete</li>
+												<li>However, <b>forced</b> side missions are played immediately regardless if there is another Imperial side mission in play</li>
+											</ul>
+										</li>
+									</ol>
+							</div>
+							<div id="ChoosingTargets">
+								<h2>Choosing Targets</h2>
+								<ul class="tutoriallist">
+									<li>Target choice is determine by mission card and automated emperor card drawn at 
+									start of a group's activation
+									</li>
+									<li>Priority targets will always be targeted before any other targets</li>
+									<li>If a figure is not assigned a priority target, or priority target is not in range, 
+									figure attempts to resolve action against a Secondary Target</li>
+									<li>Secondary targets are shown as Rebel icons on the Automated Emperor card, 
+									and resolved left to right</li>
+									<li>If no priority or secondary targets are available, closest rebel controlled 
+									figure with least health is targeted</li>
+								</ul>
+							</div>
+							<div id="AEActions">
+								<h2>Automated Emperor Card Actions</h2>
+								
+								Attempt to resolve actions on drawn Automated Emperor card in listed order. 
+								Standard action rules apply. Actions that cannot be completed or don't apply are skipped. 
+								If bottom of list is reached and actions are still remaining, start from top of list. <br>
+								
+								<ul id="AEList">
+									<li>Attack
+										<ol>
+											<li>Closest assigned priority target</li>
+											<li>1st Secondary Target within range</li>
+											<li>Closes Rebel-controlled figure with least health</li>
+										</ol>
+									</li>
+									<li>Range Definition
+										<ul>
+											<li><b>Melee </b>: Adjacent space</li>
+											<li><b>Reach </b>: 2 spaces</li>
+											<li><b>Ranged </b>: 4 spaces</li>
+											<li>Non-surge +Accuracy modifiers are added to figure's max attack range</li>
+											<li>If no targets are in range/line of sight, Attack action is skipped</li>
+											<li>If priority target is not attackable, attack action becomes interact</li>
+											<li>Attack action becomes interact, in the case of doors</li>
+										</ul>
+									</li>
+									<li>Engage
+										<ul>
+											<li>Move action to figure's speed</li>
+											<li>
+												<ol>
+													<li>Attempt for max attack range & line of sight, using shortest route</li>
+													<li>Move towards closest assigned priority target as much as possible, 
+											regardless of distance</li>
+													<li>Move toward closest secondary target as list if no priority target</li>
+												</ol>
+											</li>
+											<li>Move through opposing figures if necessary if there are enough move points</li>
+										</ul>
+									</li>
+									<li>Ability
+										<ul>
+											<li>Activate ability if it makes sense</li>
+											<li>Includes attached Modification Imperial Class cards</li>
+											<li>Resolve in order as listed on deployment card</li>
+										</ul>
+									</li>
+									<li>Repositioning
+										<ul>
+											<li>Utilize any remaining move points to reposition to better position</li>
+											<li><b>Melee </b>: Break line of sight of ranged rebels </li>
+											<li><b>Reach </b>: Move to be 2 spaces away from nearby rebels </li>
+											<li><b>Ranged </b>: Move to be up to 4 spaces away from nearby rebels. 
+											Use cover if possible </li>
+											<li>Attempt to move towards closest Priority target if assigned 
+											and not already in max attack range and line of sight</li>
+										</ul>
+									</li>
+									<li>Surges
+										<ol>
+											<li>Spend to increase accuracy to hit</li>
+											<li>Double Surges</li>
+											<li>Apply remaining from left to right, top to bottom on deployment card</li>
+										</ol>
+									</li>
+								</ul>
+								<div id="conditionsText">
+								<h2>Conditions</h2>
+									<ul id="conditionslist">
+										<li>If an Imperial figure has condition that requires action to remove, they will use an action 
+										at start of activation to remove it</li>
+									</ul>
+								</div>
+								<div id="statusPhaseText">
+										<h2>Status Phase</h2>
+											<ul>
+												<li>During Status Phase, AE will reinforce an existing deployment group, or deploy a new group</li>
+												<li>If there are 4 or more deployment groups in play, or no cards in the deployment hand, it will attempt to reinforce 
+												a deployment group</li>
+												<li>If there are fewer than 4 deployment groups, it will attempt to deploy a new group.
+												<li>Reinforcements are placed at the closest Imperial spawn point to the heros</li>
+												<li><b>Reinforcement</b>
+													<ul>
+														<li>Locate the first deployment group in play starting from the left that can accept reinforcements</li>
+														<li>Reinforce with as many units as possible</li>
+														<li>If reinforcements are placed, AE will not attempt to deploy new groups</li>
+														<li>If is an inadequet amount of threat, AE will save it for next status phase</li>
+													</ul>
+												</li>
+												<li><b>Deployment</b>
+													<ul>
+														<li>Draw top card of deployment hand</li>
+														<li>If AE has enough threat to deploy, do so</li>
+														<li>Place deployment card right of any in play</li>
+														<li>If there is not enough theat, place the deployment card at the bottom of the deployment hand 
+														and save threat for next status phase</li>
+													</ul>
+												</li>
+												<li><b>Allies</b>
+													<ul>
+														<li>If playing with less than 4 Rebels, assign a color to an Ally when placing them for a mission</li>
+													</ul>
+												</li>
+											</ul>
+									</div>
+									<div id="upgradePhaseText">
+										<h2>Upgrade Stage</h2>
+											<ul>
+												<li>Rebels upgrade as usual</li>
+												<li><b>Purchasing Class Cards</b>
+													<ul>
+														<li>Shuffle the Imperial Class deck and draw the top card</li>
+														<li>If AE has enough XP to buy the card, place it into the AE play area</li>
+														<li>If it cannot be bought, draw another card until 3 cards are drawn, or a card is bought</li>
+													</ul>
+												</li>
+												<li><b>Purchasing Agenda Cards</b>
+													<ul>
+														<li>Shuffle the Agenda deck and draw the top card</li>
+														<li>If AE has enough influence to buy the card, place it into the AE play area</li>
+														<li>If the card cannot be bought, draw anohter card, repeat until 4 cards have been drawn, or a card has been bought</li>
+													</ul>
+												</li>
+												<li><b>Increase AE Difficulty</b>
+													<ul>
+														<li>If AE lost the previous mission, increase the Blitz card counter</li>
+													</ul>
+												</li>
+											</ul>
+									</div>
+									<div id="miscText">
+										<h2>Other Bits</h2>
+										<ul>
+											<li>Any effect that would target a single Rebel will target the mission Priority Target</li>
+											<li>If Priority Target is not a valid target, draw an AE card and target the first Secondary Target</li>
+											<li>Any effect/ability that targets multiple targets should be placed to maximize targets</li>
+											<li>If unsure of anything, do the action that is <b>MOST</b> damaging to the Rebels</li>
+											<li><b>Imperial Figure Abilities</b>
+												<ul>
+													<li>AT-ST
+														<ul>
+															<li>Targeting Computer: If a single HIT result is rolled on the RED die, use this ability to reroll</li>
+														</ul>
+													</li>
+													<li>Darth Vader
+														<ul>
+															<li>Brutality: This ability will only be used if there are 2 different targets in range</li>
+															<li>Foresight: If a single DEFENSE result is rolled on a DEFENSE die, then use this ability to reroll</li>
+														</ul>
+													</li>
+													<li>General Weiss
+														<ul>
+															<li>General's Orders: Choose 2 figures that are furthest away and not within max attack of a target</li>
+															<li>Epic Arsenal: If within 2 spaces of a target, use 2 RED and 1 GREEN attack dice. If not within 2 spaces, use 1 RED, 1 BLUE, and 1 GREEN attack dice</li>
+														</ul>
+													</li>
+													<li>IG-88
+														<ul>
+															<li>Arsenal: If within 2 spaces of a target, use the RED and GREEN attack dice. If not, use the BLUE and GREEN attack dice</li>
+														</ul>
+													</li>
+													<li>Imperial Officer
+														<ul>
+															<li>Order: Choose the closest friendly figure</li>
+															<li>Executive Order: Choose the closest friendly figure. If the figure is in range to attack, attck. If not, move</li>
+															<li>Cower: Reroll if the result is a blank face on a defense die</li>
+														</ul>
+													</li>
+													<li>Nexu
+														<ul>
+															<li>Pounce: Use if within 4 spaces of a target, and Nexu has not performed an Attack this activation</li>
+														</ul>
+													</li>
+													<li>Probe Droid
+														<ul>
+															<li>Self-Destruct: Use this ability when adjacent to 2 or more Rebels are the end of the round, and there are NO adjacent friendly figures</li>
+														</ul>
+													</li>
+													<li>Royal Guard Champion
+														<ul>
+															<li>Brutality: This ability will only be used if there are 2 different targets in range</li>
+														</ul>
+													</li>
+													<li>Stormtrooper
+														<ul>
+															<li>Last Stand: Choose the closest friendly figure when using this ability</li>
+														</ul>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</div>
+							</div>
+						</div>
+						</div>
+					<div class="modal-footer">
+						<p>Web app developed by <a href="https://github.com/kckaiwei">Kevin Chang</a> and <a href="https://github.com/katmd">Kathleen McDaniel</a> Automated Emperor Cards by <a href="https://boardgamegeek.com/user/RedJak7">RedJak7</a></p>
+					</div>
+					
+					</div>
+		</div>
+
+<!--END MODAL
+-->
+
+<!--Begin floating side pullouts-->
+
+<div id="loadoutIcon" class="floatRight">
+	<img src="files/itemIcons/Ranged.png" class="barIcons" id="loadoutBtn" alt="loadout icon">
+
+</div>
+
+<div id="missionIcon" class="floatRight">
+	<img src="files/itemIcons/Mission.png" class="barIcons" id="missionBtn" alt="mission icon">
+
+</div>
+
+<div id="referenceIcon" class="floatRight">
+	<img src="files/itemIcons/Tech.png" class="barIcons" id="referenceBtn" alt="reference icon">
+
+</div>
+
+<div id="helpIcon" class="floatRight">
+	<img src="files/itemIcons/Help.png" class="barIcons" id="myBtn" alt="help icon">
+
+</div>
+
+
+<!--Pullout Modals-->
+
+<div id="loadoutModal" class="modalRight">
+	<!-- Modal content -->
+	<div class="modal-contentRight">
+		<div class="modal-header">
+				<span class="close large">&times;</span>
+				<h1>Rebel Loadout WIP</h1>
+		</div>
+		<div class="modal-body">
+			<table class="loadoutTable">
+				<tr id="titleRow">
+					<td>
+						<h3>Player #</h3>
+					</td>
+					<td>
+						<h3>Character</h3>
+					</td>
+					<td>
+						<h3>Current Experience</h3>
+					</td>
+					<td>
+						<h3>Credits</h3>
+					</td>
+					<td>
+						<h3>Skills</h3>
+					</td>
+					<td>
+						<h3>Equipment</h3>
+					</td>
+				</tr>
+				<tr id="playerOneRow">
+					<td>
+						<h3 class="playerOne">1</h3>
+					</td>
+					<td>
+						<select id="charSelect1" onchange="selectPOne()">
+							<option value="Diala">Diala Passil</option>
+							<option value="Fenn">Fenn Signis</option>
+							<option value="Gaarkhan">Gaarkhan</option>
+							<option value="Gideon">Gideon</option>
+							<option value="Jyn">Jyn Odan</option>
+							<option value="Mak">Mak Eshka'rey</option>
+							<option value="Biv">Biv Bodhrik</option>
+							<option value="Saska">Saska Teft</option>
+							<option value="Loku">Loku Kanoloa</option>
+							<option value="MHD">MHD-19</option>
+							<option value="Verena">Verena Talos</option>
+							<option value="Davith">Davith Elso</option>
+							<option value="Murne">Murne Rin</option>
+						</select>
+					</td>
+					<td>
+						<div class="center">
+							<button onClick="playerOneExpDec()">-</button>
+							<span id ="playerOneExp" class="IAfont large">0</span>
+							<button onClick="playerOneExpInc()">+</button>
+						</div>
+					</td>
+					<td>
+						<input type="text" id="playerOneCreds" value="0">
+					</td>
+					<td>
+						<form id="playerOneSkills">
+							<table>
+								<tr>
+									<td>
+										<input type="checkbox">
+									</td>
+									<td>
+										<input type="checkbox">
+									</td>
+									<td>
+										<input type="checkbox">
+									</td>
+									<td>
+										<input type="checkbox">
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="checkbox">
+									</td>
+									<td>
+										<input type="checkbox">
+									</td>
+									<td>
+										<input type="checkbox">
+									</td>
+									<td>
+										<input type="checkbox">
+									</td>
+								</tr>
+							</table>
+						</form>
+					</td>
+					<td>
+						<form id="playerOneEquip" submit="return false">
+						</form>
+					</td>
+				</tr>
+				<tr id="playerTwoRow">
+					<td>
+						<h3 class="playerTwo">2</h3>
+					</td>
+					<td>
+						<select id="charSelect2" onchange="selectPTwo()">
+							<option value="Diala">Diala Passil</option>
+							<option value="Fenn">Fenn Signis</option>
+							<option value="Gaarkhan">Gaarkhan</option>
+							<option value="Gideon">Gideon</option>
+							<option value="Jyn">Jyn Odan</option>
+							<option value="Mak">Mak Eshka'rey</option>
+							<option value="Biv">Biv Bodhrik</option>
+							<option value="Saska">Saska Teft</option>
+							<option value="Loku">Loku Kanoloa</option>
+							<option value="MHD">MHD-19</option>
+							<option value="Verena">Verena Talos</option>
+							<option value="Davith">Davith Elso</option>
+							<option value="Murne">Murne Rin</option>
+						</select>
+					</td>
+					<td>
+						<div class="center">
+							<button onClick="playerTwoExpDec()">-</button>
+							<span id ="playerTwoExp" class="IAfont large">0</span>
+							<button onClick="playerTwoExpInc()">+</button>
+						</div>
+					</td>
+					<td>
+						<input type="text" id="playerTwoCreds" value="0">
+						</input>
+					</td>
+					<td>
+						<form id="playerTwoSkills" submit="return false">
+						</form>
+					</td>
+					<td>
+						<form id="playerTwoEquip" submit="return false">
+						</form>
+					</td>
+				</tr>
+				<tr id="playerThreeRow">
+					<td>
+						<h3 class="playerThree">3</h3>
+					</td>
+					<td>
+						<select id="charSelect3" onchange="selectPThree()">
+							<option value="Diala">Diala Passil</option>
+							<option value="Fenn">Fenn Signis</option>
+							<option value="Gaarkhan">Gaarkhan</option>
+							<option value="Gideon">Gideon</option>
+							<option value="Jyn">Jyn Odan</option>
+							<option value="Mak">Mak Eshka'rey</option>
+							<option value="Biv">Biv Bodhrik</option>
+							<option value="Saska">Saska Teft</option>
+							<option value="Loku">Loku Kanoloa</option>
+							<option value="MHD">MHD-19</option>
+							<option value="Verena">Verena Talos</option>
+							<option value="Davith">Davith Elso</option>
+							<option value="Murne">Murne Rin</option>
+						</select>
+					</td>
+					<td>
+						<div class="center">
+							<button onClick="playerThreeExpDec()">-</button>
+							<span id ="playerThreeExp" class="IAfont large">0</span>
+							<button onClick="playerThreeExpInc()">+</button>
+						</div>
+					</td>
+					<td>
+						<input type="text" id="playerThreeCreds" value="0">
+						</input>
+					</td>
+					<td>
+						<form id="playerThreeSkills" submit="return false">
+						</form>
+					</td>
+					<td>
+						<form id="playerThreeEquip" submit="return false">
+						</form>
+					</td>
+				</tr>
+				<tr id="playerFourRow">
+					<td>
+						<h3 class="playerFour">4</h3>
+					</td>
+					<td>
+						<select id="charSelect4" onchange="selectPFour()">
+							<option value="Diala">Diala Passil</option>
+							<option value="Fenn">Fenn Signis</option>
+							<option value="Gaarkhan">Gaarkhan</option>
+							<option value="Gideon">Gideon</option>
+							<option value="Jyn">Jyn Odan</option>
+							<option value="Mak">Mak Eshka'rey</option>
+							<option value="Biv">Biv Bodhrik</option>
+							<option value="Saska">Saska Teft</option>
+							<option value="Loku">Loku Kanoloa</option>
+							<option value="MHD">MHD-19</option>
+							<option value="Verena">Verena Talos</option>
+							<option value="Davith">Davith Elso</option>
+							<option value="Murne">Murne Rin</option>
+						</select>
+					</td>
+					<td>
+						<div class="center">
+							<button onClick="playerFourExpDec()">-</button>
+							<span id ="playerFourExp" class="IAfont large">0</span>
+							<button onClick="playerFourExpInc()">+</button>
+						</div>
+					</td>
+					<td>
+						<input type="text" id="playerFourCreds" value="0">
+						</input>
+					</td>
+					<td>
+						<form id="playerFourSkills" submit="return false">
+						</form>
+					</td>
+					<td>
+						<form id="playerFourEquip" submit="return false">
+						</form>
+					</td>
+				</tr>
+				
+			</table>
+		</div>
+		<div class="modal-footer">
+		
+		</div>
+			
+	</div>
+</div>
+
+<div id="missionModal" class="modalRight">
+	<!-- Modal content -->
+	<div class="modal-content">
+		<div id="missionModalHeader" class="modal-header">
+				<span class="close large">&times </span>
+				<h1>Mission Selection</h1>
+		</div>
+		<div class="modal-body">
+		<!-- wrapper div for alignment -->
+    <div class="mobilealign">
+	<div id="missionSelector" class="shaded">
+		<h2 class="center">Missions</h2>
+	</div>
+    </div>
+	<div class="tablewrapper">
+		<table id="missionOverallTable" class="tableHolder section group divTable stack">
+				<tr>
+					<td>
+			<div class="col">
+				<h3 class="center">Core Missions (Story Missions in Blue)</h3>
+					<div>
+						<form id="missionOptions" action="#" method="post" onsubmit="return false">
+							<table id="missionTable" class="center internalnonstack">
+								<tr>
+									<td class="coreMission">
+										<input type="radio" name="mission" id="mission1" value="Aftermath">
+										<label for="mission1">Aftermath</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission2" value="Captured">
+										<label for="mission2">Captured</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission3" value="Brushfire">
+										<label for="mission3">Brushfire</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission4" value="Temptation">
+										<label for="mission4">Temptation</label>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="radio" name="mission" id="mission5" value="HighMoon"> 
+										<label for="mission5">High Moon</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission6" value="Indebted">
+										<label for="mission6">Indebted</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission7" value="LooseCannon">
+										<label for="mission7">Loose Cannon</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission8" value="FriendsOfOld">
+										<label for="mission8">Friends Of Old</label>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="radio" name="mission" id="mission9" value="SorryAboutTheMess">
+										<label for="mission9">Sorry About the Mess</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission10" value="Homecoming">
+										<label for="mission10">Homecoming</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission11" value="TheSpiceJob">
+										<label for="mission11">The Spice Job</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission12" value="TargetOfOpportunity">
+										<label for="mission12">Target Of Opportunity</label>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="radio" name="mission" id="mission13" value="VipersDen">
+										<label for="mission13">Viper's Den</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission14" value="ASimpleTask">
+										<label for="mission14">A Simple Task</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission15" value="GenerousDonations">
+										<label for="mission15">Generous Donations</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission16" value="LuxuryCruise">
+										<label for="mission16">Luxury Cruise</label>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="radio" name="mission" id="mission17" value="MeansOfProduction">
+										<label for="mission17">Means of Production</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission18" value="BreakingPoint">
+										<label for="mission18">Breaking Point</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission19" value="Impounded">
+										<label for="mission19">Impounded</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission20" value="Wanted">
+										<label for="mission20">Wanted</label>
+									</td>
+								</tr>
+								<tr>
+									<td class="coreMission">
+										<input type="radio" name="mission" id="mission21" value="ANewThreat">
+										<label for="mission21">A New Threat</label>
+									</td>
+									<td class="coreMission">
+										<input type="radio" name="mission" id="mission22" value="UnderSiege">
+										<label for="mission22">Under Siege</label>
+									</td>
+									<td class="coreMission">
+										<input type="radio" name="mission" id="mission23" value="ImperialHospitality">
+										<label for="mission23">Imperial Hospitality</label>
+									</td>
+									<td class="coreMission">
+										<input type="radio" name="mission" id="mission24" value="FlySolo">
+										<label for="mission24">Fly Solo</label>
+									</td>
+								</tr>
+								<tr>
+									<td class="coreMission">
+										<input type="radio" name="mission" id="mission25" value="Incoming">
+										<label for="mission25">Incoming</label>
+									</td>
+									<td class="coreMission">
+										<input type="radio" name="mission" id="mission26" value="DrawnIn">
+										<label for="mission26">Drawn In</label>
+									</td>
+									<td class="coreMission">
+										<input type="radio" name="mission" id="mission27" value="ChainOfCommand">
+										<label for="mission27">Chain of Command</label>
+									</td>
+									<td class="coreMission">
+										<input type="radio" name="mission" id="mission28" value="TheSource">
+										<label for="mission28">The Source</label>
+									</td>
+								</tr>
+								<tr>
+									<td class="coreMission">
+										<input type="radio" name="mission" id="mission29" value="LastStand">
+										<label for="mission29">Last Stand</label>
+									</td>
+									<td class="coreMission">
+										<input type="radio" name="mission" id="mission30" value="DesperateHour">
+										<label for="mission30">Desperate Hour</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission31" value="DarkObsession">
+										<label for="mission31">Dark Obsession</label>
+									</td>
+									<td>
+										<input type="radio" name="mission" id="mission32" value="SympathyForTheRebellion">
+										<label for="mission32">Sympathy for the Rebellion</label>
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				<br>
+			
+				<div class="buttonCenter padded">
+					<button id="missionChooseButton" class="padded" onClick="missionCoreSelect()">Choose</button>
+				</div>
+				</td>
+				
+				<td>
+				
+				<div class="col">
+					<h3 id="expansionTitleText" class="center">Ally/Villain Pack Missions: Colored by Release Wave</h3>
+					<div>
+						<form id="expMissionOptions" action="#" onsubmit="return false">
+							<table class="center internalnonstack" id="expansionTable">
+								<tr class="wave1">
+									<td>
+										<input type="radio" name="expMission" id="expMission1" value="Celebration">
+										<label for="expMission1">Celebration</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission2" value="ForestAmbush">
+										<label for="expMission2">Forest Ambush</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission3" value="ImperialEntanglements">
+										<label for="expMission3">Imperial Entanglements</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission4" value="BinaryRevolution">
+										<label for="expMission4">Binary Revolution</label>
+									</td>
+								</tr>
+								<tr class="wave1">
+									<td>
+										<input type="radio" name="expMission" id="expMission5" value="ArmedAndOperational">
+										<label for="expMission5">Armed and Operational</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission6" value="BraceForImpact">
+										<label for="expMission6">Brace for Impact</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission7" value="Infection">
+										<label for="expMission7">Infection</label>
+									</td>
+								</tr>
+								<tr class="wave2">
+									<td>
+										<input type="radio" name="expMission" id="expMission8" value="PredatorAndPrey">
+										<label for="expMission8">Predator and Prey</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission9" value="StrengthOfCommand">
+										<label for="expMission9">Strength of Command</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission10" value="OpenToInterpretation">
+										<label for="expMission10">Open to Interpretation</label>
+									</td>
+								</tr>
+								<tr class="wave3">
+									<td>
+										<input type="radio" name="expMission" id="expMission11" value="Back-RoomBargains">
+										<label for="expMission11"> Back-Room Bargains</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission12" value="BunkerBuster">
+										<label for="expMission12">Bunker Buster</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission13" value="BruteForce">
+										<label for="expMission13">Brute Force</label>
+									</td>
+								</tr>
+								<tr class="wave4">
+									<td>
+										<input type="radio" name="expMission" id="expMission14" value="PreciousCargo">
+										<label for="expMission14">Precious Cargo</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission15" value="IntoTheWastes">
+										<label for="expMission15">Into the Wastes</label>
+									</td>
+								</tr>
+								<tr class="wave5">
+									<td>
+										<input type="radio" name="expMission" id="expMission16" value="ABountyProtected">
+										<label for="expMission16">A Bounty Protected</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission17" value="Snowcrash">
+										<label for="expMission17">Snowcrash</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission18" value="FullyCharged">
+										<label for="expMission18">Fully Charged</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission19" value="CommunicationBreakdown">
+										<label for="expMission19">Communication Breakdown</label>
+									</td>
+								</tr>
+								<tr class="wave6">
+									<td>
+										<input type="radio" name="expMission" id="expMission20" value="SecurityBreach">
+										<label for="expMission20">Security Breach</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission21" value="Gunrunner">
+										<label for="expMission21">Gunrunner</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission22" value="IntoTheUnknown">
+										<label for="expMission22">Into the Unknown</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission23" value="PayingDebts">
+										<label for="expMission23">Paying Debts</label>
+									</td>
+								</tr>
+								<tr class="wave7">
+									<td>
+										<input type="radio" name="expMission" id="expMission24" value="TopTarget">
+										<label for="expMission24">Top Target</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission25" value="DeadlyTransmission">
+										<label for="expMission25">Deadly Transmission</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expMission26" value="Cornered">
+										<label for="expMission26">Cornered</label>
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+					
+					<br>
+					
+					<div class="buttonCenter padded">
+						<button id="missionChooseButton" onClick="missionExpacSelect()">Choose</button>
+					</div>
+				</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div id="expStory" class="col">
+					<h3 class="center">Expansion Box Story Missions</h3>
+						<form id="expStoryForm" onsubmit="return false">
+							<table class="center internalnonstack">
+								<tr class="wave2">
+									<td>
+										<input type="radio" name="expMission" id="expStory1" value="WhiteNoise">
+										<label for="expStory1">White Noise</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expStory2" value="HomeFront">
+										<label for="expStory2">Home Front</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expStory3" value="ReturnToEchoBase">
+										<label for="expStory3">Return to Echo Base</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expStory4" value="RescueOps">
+										<label for="expStory4">Rescue Ops</label>
+									</td>
+								</tr>
+								<tr class="wave2">
+									<td>
+										<input type="radio" name="expMission" id="expStory5" value="TheLastLine">
+										<label for="expStory5">The Last Line</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expStory6" value="Disaster">
+										<label for="expStory6">Disaster</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expStory7" value="OurLastHope">
+										<label for="expStory7">Our Last Hope</label>
+									</td>
+								</tr>
+							</table>
+						</form>
+						<br>
+						<div class="buttonCenter padded">
+							<button id="missionExpCoreChooseButton" class="padded" onClick="missionExpacBoxSelect()">Choose</button>
+						</div>
+					</div>
+				</td>
+				<td>
+					<div class="col">
+					<h3 class="center">Expansion Box Side Missions: Colored by Expansion Box</h3>
+						<form id="expSideForm" onsubmit="return false">
+							<table class="center internalnonstack">
+								<tr class="wave1">
+									<td>
+										<input type="radio" name="Twin" id="expSide1" value="ShadyDealings">
+										<label for="expSide1">Shady Dealings</label>
+									</td>
+									<td>
+										<input type="radio" name="Twin" id="expSide2" value="HuntedDown">
+										<label for="expSide2">Hunted Down</label>
+									</td>
+									<td>
+										<input type="radio" name="Twin" id="expSide3" value="CanyonRun">
+										<label for="expSide3">Canyon Run</label>
+									</td>
+								</tr>
+								<tr class="wave2">
+									<td>
+										<input type="radio" name="expMission" id="expSide4" value="SurvivalOfTheFittest">
+										<label for="expSide4">Survival of the Fittest</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expSide5" value="TheHardWay">
+										<label for="expSide5">The Hard Way</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expSide6" value="PreventiveMeasures">
+										<label for="expSide6">Preventive Measures</label>
+									</td>
+									<td>
+										<input type="radio" name="expMission" id="expSide7" value="EscapeFromCloudCity">
+										<label for="expSide7">Escape from Cloud City</label>
+									</td>
+								</tr>
+								<tr class="wave2">
+									<td>
+										<input type="radio" name="expMission" id="expSide8" value="ScouringOfTheHomestead">
+										<label for="expSide8">Scouring of the Homestead</label>
+									</td>
+								</tr>
+								<tr class="wave3">
+									<td>
+										<input type="radio" name="Bespin" id="expSide9" value="Reclamation">
+										<label for="expSide9">Reclamation</label>
+									</td>
+									<td>
+										<input type="radio" name="Bespin" id="expSide10" value="CloudCitysSecret">
+										<label for="expSide10">Cloud City's Secret</label>
+									</td>
+									<td>
+										<input type="radio" name="Bespin" id="expSide11" value="FreedomFighters">
+										<label for="expSide11">Freedom Fighters</label>
+									</td>
+									<td>
+										<input type="radio" name="Bespin" id="expSide12" value="HostileTakeover">
+										<label for="expSide12">Hostile Takeover</label>
+									</td>
+								</tr>
+								<tr class="wave3">
+									<td>
+										<input type="radio" name="Bespin" id="expSide13" value="PanicInTheStreets">
+										<label for="expSide13">Panic in the Streets</label>
+									</td>
+									<td>
+										<input type="radio" name="Bespin" id="expSide14" value="Reclassified">
+										<label for="expSide14">Reclassified</label>
+									</td>
+								</tr>
+							</table>
+						</form>
+						<br>
+						
+						<div class="buttonCenter padded">
+							<button id="expacMissionChooseButton" onClick="missionExpacSideSelect()">Choose</button>
+						</div>
+					</div>
+				</td>
+			</tr>
+			
+			
+		</table>
+		</div>
+	</div>
+		<div class="modal-footer">
+		
+		</div>
+			
+	</div>
+</div>
+
+<div id="referenceModal" class="modalRight">
+	<!-- Modal content -->
+	<div class="modal-contentRight">
+		<div id="referenceModalHeader" class="modal-header">
+				<span class="close large">&times </span>
+				<h1>Imperial Assault Reference Documents</h1>
+		</div>
+		<div class="modal-body">
+		<a href="https://images-cdn.fantasyflightgames.com/filer_public/84/fc/84fcff54-eafe-45ec-acf4-538a86e1acfc/imperial_assault_learn_to_play_guide.pdf">
+		Imperial Assault Learn-to-Play Guide
+		</a>
+		<br>
+		<a href="https://images-cdn.fantasyflightgames.com/filer_public/ef/86/ef866943-534b-429e-b8db-7d99875431b7/imperial_assault_rules_reference_guide.pdf">
+		Imperial Assault Rules Reference Guide
+		</a>
+		<br>
+		<a href="https://images-cdn.fantasyflightgames.com/filer_public/00/45/00451ac7-4dfe-46b6-987a-743c5b1e5108/imperial_assault_twin_shadows_rulebook.pdf">
+		Twin Shadows Rules
+		</a>
+		<br>
+		<a href="https://images-cdn.fantasyflightgames.com/filer_public/71/c1/71c1dbbc-6427-4674-be0e-5d35937c4f37/return_to_hoth_rules.pdf">
+		Return to Hoth Rules
+		</a>
+		<br>
+		<a href="https://images-cdn.fantasyflightgames.com/filer_public/95/9c/959cd379-db67-4218-ae79-7450f183d090/swi24_rulebook.pdf">
+		The Bespin Gambit Rules
+		</a>
+		<br>
+		</div>
+		<div class="modal-footer">
+		
+		</div>
+			
+	</div>
+</div>
+
+<!--END PULLOUTS-->
+
+<script type='text/javascript'>
+		//MESS AHEAD! Should've started it modular. TODO
+		//SETUP
+		//MESS OF VARS
+		
+		//blitz cards filenames
+		var blitzCards = ["Blitz 1","Blitz 2","Blitz 3","Blitz 4","Blitz 5", "Blitz 6","Blitz 7","Blitz 8","Blitz 9","Blitz 10"];
+		var blitzColors = ["Blue", "Gold", "Green", "Red"];
+		//Include multiples if multiple in set
+		//deployment card sets
+		var coreImpBelow6Standard = ["ProbeDroid","ProbeDroid","Stormtrooper","Stormtrooper","ImpOfficer","ImpOfficer","EWebEngi","ELImpOfficer","ELProbeDroid"];
+		var coreImp6_8Standard = ["RoyalGuard","ELEWebEngi"];
+		var coreImp8_12Standard = ["ELStormtrooper","ELRoyalGuard"];
+		var coreImpNonUnique12Up = ["AT-ST"];
+		var coreScumBelow6Standard = ["Nexu", "ELNexu"];
+		var coreScum6_8Standard = ["TrandoshanHunter"];
+		var coreScum8_12Standard = ["ELTrandoshanHunter"];
+		var coreScumNonUnique12Up = [];
+		var coreCheckList = ["ELIG88","DarthVader","ELGeneralWeiss","ELRoyalGuardChamp","ELRoyalGuard","AT-ST","Nexu","ELNexu","TrandoshanHunter","ELTrandoshanHunter","ProbeDroid","RoyalGuard","Stormtrooper","ELEWebEngi","ImpOfficer","ELStormtrooper","EWebEngi","ELImpOfficer","ELProbeDroid"]
+		var expac6Below = ["HiredGuns", "ELHiredGuns", "ISBInfiltrators","Stormtrooper"];
+		var expac6_8 = ["ELISBInfiltrators"];
+		var expac8_12 = ["ELBanthaRider"];
+		//AVP Pack deploycards
+		var Stormtroopers = ["Stormtrooper", "ELStormtrooper"];
+		var ISBInfiltrators = ["ISBInfiltrators", "ELISBInfiltrators"];
+		var HiredGuns = ["HiredGuns","ELHiredGuns"];
+		var BanthaRider = ["ELBanthaRider"];
+		//Character Skills
+		var Diala = ["Force Adept (1)","Force Throw (1)","Battle Meditation (2)","Defensive Stance (2)","Art of Movement (3)","Snap Kick (3)", "Dancing Weapon (4)","Way of the Sarlacc (4)"];
+		var Fenn = ["Tactile Movement (1)","Take Cover (1)","Adrenaline Rush (2)","Weapon Expert (2)", "Suppressive Fire (3)","Trench Fighter (3)","Rebel Elite (4)","Superior Positioning (4)"];
+		var Gaarkhan = ["Wookiee Fortitude (1)","Wookiee Loyalty (1)","Ferocity (2)","Staggering Blow (2)","Vicious Strike (3)","Rampage (3)","Unstoppable (4)","Brutal Cleave (4)"];
+		var Gideon = ["Called Shot (1)","Military Efficiency (1)", "Air of Command (2)","Mobile Tactician (2)","For the Cause! (3)", "Rallying Shout (3)","Hammer and Anvil (4)","Master Stroke (4)",];
+		var Jyn = ["Quick as a Whip (1)","Smuggler's Luck (1)","Cheap Shot (2)", "Roll with It (2)","Get Cocky (3)","Gunslinger (3)", "Sidewinder (4)","Trick Shot (4)"];
+		var Mak = ["Disenage (1)","Supply Network (1)","Jeswandi Training (2)", "Target Acquired (2)","Execute (3)", "Expertise (3)","Decoy (4)","No Escape (4)"];
+		var Biv = ["Advance (1)","Shake it Off (1)","Crushing Blow (2)", "Into the Fray (2)", "Trophy Armor (3)","Vibrobayonet (3)","Final Stand (4)", "Stay Down (4)"];
+		var Saska = ["Tool Kit (1)","Unstable Device (1)", "Energy Shield (2)","Structural Weakness (2)","Gadgeteer (3)", "Power Converter (3)","Adrenaline Injector (4)", "Remote Distribution (4)"];
+		var Loku = ["Combat Spotter (1)", "Scouting Report (1)","Overwatch (2)","Spectrum Scanner (2)","Scout's Guidance (3)","Study of Enemies (3)","Coordinated Attack (4)","Mon Cala Special Forces (4)"];
+		var MHD = ["Bacta Injector (1)","Improper Procedure (1)","Field Surgeon (2)", "Fuel Injection (2)","Adrenal Vapor (3)", "Miracle Worker (3)","Bacta Radiator (4)","Combat Override (4)"];
+		var Verena = ["Combat Momentum (1)","Create Opening (1)","K'tara Maneuver (2)","Student of Battle (2)","Point Blank Shot (3)","Improvised Cover (3)", "Master Operative (4)","Combat Mastery (4)"];
+		var Davith = ["Covert Operative (1)","Elusive Agent (1)","Blindside (2)","Falling Leaf (2)", "Force Illusion (3)", "Shrouded Lightsaber (3)","Fell Swoop (4)", "Embody the Force (4)"];
+		var Murne = ["Company of Heroes (1)", "Sonic Bellow (1)", "Rebel Propaganda (2)", "Professional Aide (2)", "Solidarity (3)", "Double Agent (3)","Waylay (4)", "Leady from the Front (4)"];
+		//THREAT COUNTER
+		var threatCounterInt = 0;
+		//INFLUENCE Counter
+		var influenceCounterInt = 0;
+		//Player Exp
+		var playerOneExp = 0;
+		var playerTwoExp = 0;
+		var playerThreeExp = 0;
+		var playerFourExp = 0;
+		//current mission
+		var currentMission = "";
+		//0 is showing front, 1 is showing back
+		var missionFace = 0;
+		
+		//Difficulty Settings
+		//deployment threat level (starts at 2)
+		//2-6below; 3-8below; 4-12below; 5+ -all non-unique
+		var deploymentDiff = 2;
+		
+		//Where file path to mission images are
+		var currentMissionPath = "";
+		
+		//New deck
+		//Load first, then call durstenfeld shuffle
+		var deck = [];
+		//Used when resetting deck to draw
+		var savedBlitzDeck = [];
+		
+		//DECK SHUFFLE
+		
+		//BLITZ DECK MANAGEMENT
+		//Starting number of cards
+		var blitzCardsInt = 1;
+		
+		function randomCardNumberDraw(min,max){
+			//param min: minimum number to random draw from
+			//type min: integer
+			//param max: maximum number to random draw from
+			//type max: integer
+			//returns: returns a randomized integer
+			return Math.floor(Math.random()*(max-min+1)+min);
+		}
+		
+		//DEPLOYMENT DECK MANAGEMENT
+		var deployDeck = [];
+		//Copy of shuffled deploy Deck
+		//Use when resetting deck to draw
+		var savedDeployDeck = [];
+		var blitzCardsDeckClone = [];
+		
+		//ON PAGE LOAD FUNCTIONS
+		function pageLoad(){
+			//Everything that must be loaded upon page load
+			deployDeck = deployDeck.concat(coreImpBelow6Standard);
+			deployDeck = deployDeck.concat(coreScumBelow6Standard);
+			savedDeployDeck = deployDeck.slice(0);
+			deployDeck = shuffleArray(deployDeck.slice(0));
+			//clone deployment deck and save it to saved blitz deck
+			document.getElementById('deployDiffInt').innerHTML = deploymentDiff;
+			
+			//BLITZ CARD ON LOAD SECTION
+			//Randomly pick Blitz Cards
+			//To current blitz level
+			//clone blitz card's deck to shuffle and POP
+			blitzCardsDeckClone = shuffleArray(blitzCards.slice(0));
+			
+			for (var i=0, len=blitzCardsInt; i<blitzCardsInt; i++){
+			//10 cards to pick from, randomly picks one
+				deck.push(blitzCardsDeckClone.pop());
+			}
+		
+		
+			//Load up blitz color focus cards
+			for (var i=0; i<blitzColors.length; i++){
+				for (var j=1; j<7; j++){
+					deck.push(String(blitzColors[i]) + " " + String(j));
+				}
+			}
+			deck = shuffleArray(deck.slice(0));
+			//clone deck and save it to saved blitz deck
+			savedBlitzDeck = deck.slice(0);
+			//HIDING DEBUG OUTPUT
+			//document.getElementById('demo').innerHTML = deck;
+			document.getElementById('blitzLevelIntText').innerHTML = blitzCardsInt;
+			
+			//END BLITZ CARD ON LOAD SECTION
+			//
+			//
+			
+		}
+		
+		//END VAR SETUP
+		//
+		//
+		//HELPER FUNCTIONS
+		//Durstenfeld shuffle
+		//ALWAYS CLONE!!!!!! array = array.slice(0)
+		//Somehow losing first and last index if not using clone.
+		function shuffleArray(array) {
+			//param array: array to be shuffled
+			//type array: array
+			//returns: returns a shuffled array, the original is changed, so clone if needed
+			for (var i = array.length - 1; i > 0; i--) {
+				var j = Math.floor(Math.random() * (i + 1));
+				var temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
+			}
+			return array;
+		}
+		
+		//adding image function
+		//GENERIC TEMPLATE!!! MODIFY AS NEEDED
+		function show_image(src, width, height, alt) {
+			//param src: file path of image source
+			//type src: string
+			//param width: width of image to be shown
+			//type width: integer
+			//param height: height of image to be shown
+			//type height: integer
+			//param alt: alternative text for image
+			//type alt: string
+			//returns: appends an image element in the body, this creates a new element
+			var img = document.createElement("img");
+			img.src = src;
+			img.width = width;
+			img.height = height;
+			img.alt = alt;
+			// This next line will just add it to the <body> tag
+			document.body.appendChild(img);
+		}
+		
+		//DEPLOYMENT CARDS ONLY!!!
+		function addDeployCard(src, width, height, alt) {
+			//param src: file path of image source
+			//type src: string
+			//param width: width of image to be shown
+			//type width: integer
+			//param height: height of image to be shown
+			//type height: integer
+			//param alt: alternative text for image
+			//type alt: string
+			//returns: appends an image element in the deployment Div, this creates a new element
+			var img = document.createElement("img");
+			img.src = src;
+			img.width = width;
+			img.height = height;
+			img.alt = alt;
+			// This next line will just add it to the <body> tag
+			document.getElementById('deployImgDiv').appendChild(img);
+		}
+		
+		function replace_image(src, width, height, alt, pageID) {
+			//param src: file path of image source
+			//type src: string
+			//param width: width of image to be shown
+			//type width: integer
+			//param height: height of image to be shown
+			//type height: integer
+			//param alt: alternative text for image
+			//type alt: string
+			//param pageID: element ID of the image to be modified
+			//type pageID: string
+			//returns: replaces an image element with a new image. Used for dynamic images
+			img = document.getElementById(String(pageID));
+			img.src = src;
+			img.width = width;
+			img.height = height;
+			img.alt = alt;
+		}
+		function clearBox(elementID) {
+			//param elementID: element id to be cleared
+			//type elementID: string
+			//returns: clears out the selected elementID
+			document.getElementById(elementID).innerHTML = "";
+		}
+		//END HELPER FUNCTIONS
+		
+		//MAIN BODY
+		//
+		//THREAT COUNTER SECTION
+		//
+		function threatCounterInc(){
+			//Did not know javascript takes +=, too late now.
+			//returns: increases the threat counter integer, changes color as necessary
+			if (threatCounterInt < 20) {
+				threatCounterInt = threatCounterInt + 1;
+			}
+			document.getElementById('threatCounterIntText').innerHTML = threatCounterInt;
+			setTextColorByValue(threatCounterInt, 'threatCounterIntText');
+		}	
+		
+		function threatCounterDec(){
+			//Did not know javascript takes +=, too late now.
+			//returns: decreases the threat counter integer, changes color as necessary
+			if (threatCounterInt > 0) {
+				threatCounterInt = threatCounterInt - 1;
+			}
+			document.getElementById('threatCounterIntText').innerHTML = threatCounterInt;	
+			setTextColorByValue(threatCounterInt, 'threatCounterIntText');
+		}
+		
+		//INFLUENCE COUNTER SECTION
+		//
+		
+		function influenceCounterInc(){
+			//Did not know javascript takes +=, too late now.
+			//returns: increases the influence counter integer, changes color as necessary
+			if (influenceCounterInt < 20) {
+				influenceCounterInt = influenceCounterInt + 1;
+			}
+			document.getElementById('influenceCounterIntText').innerHTML = influenceCounterInt;
+			setTextColorByValue(influenceCounterInt, 'influenceCounterIntText');
+		}
+		
+		function influenceCounterDec(){
+			//Did not know javascript takes +=, too late now.
+			//returns: decreases the influence counter integer, changes color as necessary
+			if (influenceCounterInt > 0) {
+				influenceCounterInt = influenceCounterInt - 1;
+			}
+			document.getElementById('influenceCounterIntText').innerHTML = influenceCounterInt;	
+			setTextColorByValue(influenceCounterInt, 'influenceCounterIntText');
+		}
+		
+		//Text color setting
+		function setTextColorByValue(value, objid){
+			//param value: value to be checked against a color
+			//type value: integer
+			//param objid: element ID to be color changed
+			//type objid: string
+			//returns: changes the color of objid based on value
+			if (value > 14){
+				document.getElementById(objid).style.color = "rgb(204, 0, 0)";
+			}
+			
+			if (value > 12 && value < 14) {
+				document.getElementById(objid).style.color = "rgb(204, 102, 0)";
+			}
+			
+			if (value > 9 && value < 11) {
+				document.getElementById(objid).style.color = "rgb(204, 204, 0)";
+			}
+			
+			if (value > 6 && value < 8) {
+				document.getElementById(objid).style.color = "rgb(153, 204, 0)";
+			}
+			
+			if (value > 3 && value < 5){
+				document.getElementById(objid).style.color = "rgb(51, 204, 0)";
+			}
+			
+			//Green
+			if (value > 0 && value < 2){
+				document.getElementById(objid).style.color = "rgb(0, 204, 0)";
+			}
+		}
+		
+		//MISSION SELECTION RADIO BUTTONS
+		//
+		var missionCardWidth = 335;
+		var missionCardHeight = 523;
+		function missionCoreSelect(){
+			//returns: checks for selected mission, and replaces mission image with select mission (used for core missions)
+			//Also adds eventListener to flip mission image
+			for (var i=0, len=missionOptions.length; i<len; i++){
+				if (missionOptions[i].type === 'radio'){
+					if (missionOptions[i].checked){
+						currentMission = missionOptions[i].value;
+						currentMissionPath = "Core";
+						replace_image("files/Mission/Core/" + missionOptions[i].value + "Front.jpg", missionCardWidth, missionCardHeight, "Mission Front", "missionFront");
+						document.getElementById("missionFront").addEventListenter("click", missionFlip);
+					}
+				}
+			}
+			closeMissionModal();
+		
+		}
+		
+		function missionExpacSelect(){
+			//returns: checks for selected mission, and replaces mission image with select mission (used for none core missions)
+			//Also adds eventListener to flip mission image
+			for (var i=0, len=expMissionOptions.length; i<len; i++){
+				if (expMissionOptions[i].type === 'radio'){
+					if (expMissionOptions[i].checked){
+						currentMission = expMissionOptions[i].value;
+						currentMissionPath = "Expansions";
+						replace_image("files/Mission/Expansions/" + expMissionOptions[i].value + "Front.jpg", missionCardWidth, missionCardHeight, "Mission Front", "missionFront");
+						document.getElementById("missionFront").addEventListenter("click", missionFlip);
+					}
+				}
+			}
+			closeMissionModal();
+		
+		}
+		
+		function missionExpacBoxSelect(){
+			//returns: checks for selected mission, and replaces mission image with select mission (used for expansion box missions)
+			//sets current misison path for flipping function. Also adds eventListener to flip mission image
+			for (var i=0, len=expStoryForm.length; i<len; i++){
+				if (expStoryForm[i].type === 'radio'){
+					if (expStoryForm[i].checked){
+						currentMission = expStoryForm[i].value;
+						if (expStoryForm[i].name == "Twin"){
+							currentMissionPath = "Twin Shadows";
+						}
+						else if (expStoryForm[i].name == "Bespin"){
+							currentMissionPath = "The Bespin Gambit";
+						}
+						else {
+							currentMissionPath = "Return to Hoth";
+						}
+						replace_image("files/Mission/" + currentMissionPath + "/" + expStoryForm[i].value + "Front.jpg", missionCardWidth, missionCardHeight, "Mission Front", "missionFront");
+						document.getElementById("missionFront").addEventListenter("click", missionFlip);
+					}
+				}
+			}
+		
+		}
+		
+		function missionExpacSideSelect(){
+			//returns: checks for selected mission, and replaces mission image with select mission (used for expansion box side missions)
+			//Also adds eventListener to flip mission image
+			for (var i=0, len=expSideForm.length; i<len; i++){
+				if (expSideForm[i].type === 'radio'){
+					if (expSideForm[i].checked){
+						currentMission = expSideForm[i].value;
+						if (expSideForm[i].name == "Twin"){
+							currentMissionPath = "Twin Shadows";
+						}
+						else if (expSideForm[i].name == "Bespin"){
+							currentMissionPath = "The Bespin Gambit";
+						}
+						else{
+							currentMissionPath = "Return to Hoth";
+						}
+						replace_image("files/Mission/" + currentMissionPath + "/" + expSideForm[i].value + "Front.jpg", missionCardWidth, missionCardHeight, "Mission Front", "missionFront");
+						document.getElementById("missionFront").addEventListenter("click", missionFlip);
+					}
+				}
+			}
+		
+		}
+		
+		function missionCoreFlip(){
+			//returns: flips the current displayed core mission card image
+			if (missionFace == 0){
+				replace_image("files/Mission/Core/" + currentMission + "Back.jpg", missionCardWidth, missionCardHeight, "Mission Back", "missionFront");
+				missionFace = 1;
+			}
+			else{
+				replace_image("files/Mission/Core/" + currentMission + "Front.jpg", missionCardWidth, missionCardHeight, "Mission Front", "missionFront");
+				missionFace = 0;
+			}
+			
+		}
+		
+		function missionFlip(){
+			//returns: flips the current displayed mission card image based on currentMissionPath
+			if (missionFace == 0){
+				replace_image("files/Mission/" + currentMissionPath + "/" + currentMission + "Back.jpg", missionCardWidth, missionCardHeight, "Mission Back", "missionFront");
+				missionFace = 1;
+			}
+			else{
+				replace_image("files/Mission/" + currentMissionPath + "/" + currentMission + "Front.jpg", missionCardWidth, missionCardHeight, "Mission Front", "missionFront");
+				missionFace = 0;
+			}
+			
+		}
+		
+		//CHECK IF IN ARRAY 
+		function isInArray(value, array) {
+			//param value: value to be checked
+			//type value: any type
+			//param array: array to be evalutated
+			//type array: array
+			//returns: returns boolean
+			return array.indexOf(value) > -1;
+		}
+		
+		//DEPLOYMENT SECTION
+		//responds to deployment display click
+		function displayDeploymentCards(){
+			//return: displays top deployment card from the deck
+			//top card is popped from list
+			//checks to see if there is something left in deck
+			if (deployDeck[0]){
+				var poppedItem = String(deployDeck.pop());
+				var imgSrc = "";
+				if (coreCheckList.indexOf(poppedItem) != -1) {
+					imgSrc = "files/Deployment/Core/" + poppedItem + ".jpg";
+				}
+				else {
+					imgSrc = "files/Deployment/Exp/" + poppedItem + ".jpg";
+				}
+				//HIDING LINE USED FOR DEBUGGING
+				//document.getElementById('demo2').innerHTML = deployDeck;
+				addDeployCard(imgSrc, 335, 523, imgSrc);
+				document.getElementById('deployShuffleStatus').innerHTML = "";
+			}
+		}
+		
+		//reshuffles deployment cards using saved copy
+		function shuffleDeploymentCards(){
+			//returns: shuffles deployment cards, and adds in any checked new deployment cards
+			savedDeployDeck = shuffleArray(savedDeployDeck.slice(0));
+			deployDeck = savedDeployDeck.slice(0);
+			//add extras
+			checkAndAddUniques();
+			checkAndAddExpac();
+			//reshuffle
+			deployDeck = shuffleArray(deployDeck.slice(0));
+			//HIDING LINE FOR DEBUGGING
+			//document.getElementById('demo2').innerHTML = deployDeck;
+			document.getElementById('deployShuffleStatus').innerHTML = "Deployment Cards Shuffled!";
+			clearBox("deployImgDiv");
+		}
+		
+		//increase deployment difficulty
+		//calls reshuffle and adds required cards
+		function deploymentInc(){
+			//returns: increases deployment difficulty integer, and displays the new integer
+			deploymentDiff = deploymentDiff + 1;
+			readjustDiff();
+			document.getElementById('deployDiffInt').innerHTML = deploymentDiff;
+			//HIDING LINE FOR DEBUGGING
+			//document.getElementById('demo2').innerHTML = deployDeck;
+		}
+		
+		//decrease deployment difficulty
+		//calls reshuffle and adds required cards
+		function deploymentDec(){
+			//returns: decreases deployment difficulty integer, and displays the new integer
+			if (deploymentDiff > 2){
+				deploymentDiff = deploymentDiff - 1 ;
+				readjustDiff();
+				document.getElementById('deployDiffInt').innerHTML = deploymentDiff;
+				//HIDING LINE FOR DEBUGGING
+				//document.getElementById('demo2').innerHTML = deployDeck;
+			}
+		}
+		
+		function readjustDiff(){
+			//returns: readjusts the cards in the deployment deck through concating from core card lists
+			if (deploymentDiff >= 2) {
+				//reset deployDeck
+				deployDeck = [];
+				deployDeck = deployDeck.concat(coreImpBelow6Standard);
+				deployDeck = deployDeck.concat(coreScumBelow6Standard);
+				addDeployNonCore2Threat();
+			}
+			
+			if (deploymentDiff >= 3){
+				deployDeck = deployDeck.concat(coreImp6_8Standard);
+				deployDeck = deployDeck.concat(coreScum6_8Standard);
+				addDeployNonCore3Threat();
+			
+			
+			}
+			
+			if (deploymentDiff >= 4){
+				deployDeck = deployDeck.concat(coreImp8_12Standard);
+				deployDeck = deployDeck.concat(coreScum8_12Standard);
+				addDeployNonCore4Threat();
+			
+			
+			}
+			
+			//5 is max
+			if (deploymentDiff >= 5){
+				deployDeck = deployDeck.concat(coreImpNonUnique12Up);
+				deployDeck = deployDeck.concat(coreScumNonUnique12Up);
+				addDeployNonCore5Threat();
+			
+			
+			}
+			
+			deployDeck = shuffleArray(deployDeck);
+			savedDeployDeck = deployDeck.slice(0);
+			
+		}
+		
+		function checkAndAddExpac(){
+			//returns: checks the checkboxes for any added AVP expansions and pushes it into the deployment deck
+			for (var i=0, len=expacoptions.length; i<len; i++){
+				if (expacoptions[i].type === 'checkbox'){
+					if (expacoptions[i].checked){
+						if (deploymentDiff > 1){
+							switch (expacoptions[i].value) {
+								case "Stormtrooper":
+									deployDeck.push("Stormtrooper");
+									break;
+								
+								case "HiredGun":
+									deployDeck.push("HiredGun");
+									deployDeck.push("ELHiredGun");
+									break;
+									
+								case "ISBInfiltrator":
+									deployDeck.push("ISBInfiltrator");
+									break;
+							}
+						}
+						if (deploymentDiff > 2){
+							switch (expacoptions[i].value) {
+								case "Stormtrooper":
+									deployDeck.push("Stormtrooper");
+									break;
+								
+								case "HiredGun":
+									deployDeck.push("HiredGun");
+									deployDeck.push("ELHiredGun");
+									break;
+									
+								case "ISBInfiltrator":
+									deployDeck.push("ISBInfiltrator");
+									deployDeck.push("ELISBInfiltrator");
+									break;
+							}
+						}
+						if (deploymentDiff > 4){
+							switch (expacoptions[i].value) {
+								case "Stormtrooper":
+									deployDeck.push("Stormtrooper");
+									deployDeck.push("ELStormtrooper");
+									break;
+								
+								case "HiredGun":
+									deployDeck.push("HiredGun");
+									deployDeck.push("ELHiredGun");
+									break;
+									
+								case "ISBInfiltrator":
+									deployDeck.push("ISBInfiltrator");
+									deployDeck.push("ELISBInfiltrator");
+									break;
+									
+								case "BanthaRider":
+									deployDeck.push("ELBanthaRider");
+									break;
+							}
+						}
+						
+					}
+				}
+			}
+		}
+		
+		//Add expacs 2 threat deployment cards
+		function addDeployNonCore2Threat(){
+			//returns: pushes in additional deployment cards from AVP expansions checkboxes
+			for (var i=0, len=expacoptions.length; i<len; i++) {
+		    	if ( expacoptions[i].type === 'checkbox' ) {
+					if (expacoptions[i].checked) {
+						//Have to use Switch since can't assign Array as a value to checkbox, WHY NOT?!?!?!
+						if (expacoptions[i].value == "Stormtroopers") {
+								//for item in array IS VERY BAD TO USE IN JS!!!
+								for (var j=0; j<Stormtroopers.length; j++){
+									if (isInArray(Stormtroopers[j].value,expac6Below)){
+										deployDeck.push(Stormtroopers[j].value);
+									}
+								}
+						}
+						else if (expacoptions[i].value == "HiredGuns") {
+								//for item in array IS VERY BAD TO USE IN JS!!!
+								for (var j=0; j<HiredGuns.length; j++){
+									if (isInArray(HiredGuns[j].value,expac6Below)){
+										deployDeck.push(HiredGuns[j].value);
+									}
+								}
+						}
+						else if (expacoptions[i].value == "ISBInfiltrators") {
+								//for item in array IS VERY BAD TO USE IN JS!!!
+								for (var j=0; j<ISBInfiltrators.length; j++){
+									if (isInArray(ISBInfiltrators[j].value,expac6Below)){
+										deployDeck.push(ISBInfiltrators[j].value);
+									}
+								}
+						}
+						else {
+						}
+							//I KNOW banthas are not 6 so no need for it here
+						
+					}
+				}
+			}
+		
+		}
+		
+		//Adds expacs 3 threat deployment cards
+		function addDeployNonCore3Threat(){
+		
+		}
+		
+		function addDeployNonCore4Threat(){
+		
+		}
+		
+		function addDeployNonCore5Threat(){
+		
+		}
+		
+		//
+		//END DEPLOYMENT SECTION
+		//
+		
+		//
+		//BEGIN BLITZ/AUTOMATED EMPEROR SECTION
+		//
+		
+		function displayBlitzCards(){
+			//returns: checks to see if there is something left in blitz deck
+			//if so, top card is popped and displayed
+			if (deck[0]){
+				var poppedItem = String(deck.pop());
+				var imgSrc = "files/AE/" + poppedItem + ".jpg";
+				//HIDING DISPLAY LINE FOR DEBUG
+				//document.getElementById('demo').innerHTML = deck;
+				replace_image(imgSrc, 335, 523, imgSrc, "currentBlitzImg");
+				document.getElementById('blitzShuffleStatus').innerHTML = "";
+			}
+		}
+		
+		function shuffleBlitzCards(){
+			//returns: reshuffles deployment cards using a saved copy
+			savedBlitzDeck = shuffleArray(savedBlitzDeck);
+			deck = savedBlitzDeck.slice(0);
+			//HIDING LINE USED FOR DEBUG
+			//document.getElementById('demo').innerHTML = deck;
+			document.getElementById('blitzShuffleStatus').innerHTML = "AE cards Shuffled!";
+		}
+		
+		function blitzInc(){
+			//returns: increases the blitz threat level
+			//Did not know javascript takes +=, too late now.
+			if (blitzCardsInt < 10) {
+				blitzCardsInt = blitzCardsInt + 1;
+				blitzReadjust();
+			}
+			document.getElementById('blitzLevelIntText').innerHTML = blitzCardsInt;			
+		}
+		
+		function blitzDec(){
+			//returns: decrease the blitz threat level
+			//Did not know javascript takes +=, too late now.
+			if (blitzCardsInt > 2){
+				blitzCardsInt = blitzCardsInt - 1;
+				blitzReadjust();
+			}
+			document.getElementById('blitzLevelIntText').innerHTML = blitzCardsInt;
+		}
+		
+		function blitzReadjust(){
+			//First, clear deck
+			deck = [];
+			//reshuffle blitzCardsDeckClone
+			//reset + shuffle then pop from it to ensure random draw
+			blitzCardsDeckClone = [];
+			//must clone with .slice(0)
+			//shufflearray modifies original and messes up somehow.
+			blitzCardsDeckClone = shuffleArray(blitzCards.slice(0));
+			//push in cards as needed
+			for (var i=0; i<blitzCardsInt; i++){
+			//10 cards to pick from, randomly picks one
+				deck.push(blitzCardsDeckClone.pop());
+			}
+		
+		
+			//Load up blitz color focus cards; always same amount
+			for (var i=0; i<blitzColors.length; i++){
+				for (var j=1; j<7; j++){
+					deck.push(String(blitzColors[i]) + " " + String(j));
+				}
+			}
+			deck = shuffleArray(deck);
+			//clone deck and save it to saved blitz deck
+			//reset savedBlitzDeck before reusing
+			savedBlitzDeck = [];
+			savedBlitzDeck = deck.slice(0);
+		}
+		
+		//END BLITZ/AUTOMATED EMPEROR SECTION
+		
+		//UNIQUES SECTION BEGIN
+		//
+		function checkAndAddUniques() {
+			for (var i=0, len=uniqueOptions.length; i<len; i++){
+				if (uniqueOptions[i].type === 'checkbox'){
+					if (uniqueOptions[i].checked){
+						deployDeck.push(uniqueOptions[i].value);
+					}
+				}
+			}
+			
+		}
+		
+		//UNIQUES SECTION END
+		//
+		
+		//BEGIN IMPERIAL CLASS SECTION
+		//
+		//
+		//for loop doesn't work, wtf. Maybe due to replace_image() needs tag
+		function MMsel(){
+			document.getElementById('selImpClass').innerHTML = "Military Might";
+			replace_image("files/ImpClass/MM1.jpg", 298, 430, "MM", "IC1");
+			replace_image("files/ImpClass/MM2.jpg", 298, 430, "MM", "IC2");
+			replace_image("files/ImpClass/MM3.jpg", 298, 430, "MM", "IC3");
+			replace_image("files/ImpClass/MM4.jpg", 298, 430, "MM", "IC4");
+			replace_image("files/ImpClass/MM5.jpg", 298, 430, "MM", "IC5");
+			replace_image("files/ImpClass/MM6.jpg", 298, 430, "MM", "IC6");
+			replace_image("files/ImpClass/MM7.jpg", 298, 430, "MM", "IC7");
+			replace_image("files/ImpClass/MM8.jpg", 298, 430, "MM", "IC8");
+			replace_image("files/ImpClass/MM9.jpg", 298, 430, "MM", "IC9");
+		}
+		
+		function STsel(){
+			document.getElementById('selImpClass').innerHTML = "Subversive Tactics";
+			replace_image("files/ImpClass/ST1.jpg", 298, 430, "ST", "IC1");
+			replace_image("files/ImpClass/ST2.jpg", 298, 430, "ST", "IC2");
+			replace_image("files/ImpClass/ST3.jpg", 298, 430, "ST", "IC3");
+			replace_image("files/ImpClass/ST4.jpg", 298, 430, "ST", "IC4");
+			replace_image("files/ImpClass/ST5.jpg", 298, 430, "ST", "IC5");
+			replace_image("files/ImpClass/ST6.jpg", 298, 430, "ST", "IC6");
+			replace_image("files/ImpClass/ST7.jpg", 298, 430, "ST", "IC7");
+			replace_image("files/ImpClass/ST8.jpg", 298, 430, "ST", "IC8");
+			replace_image("files/ImpClass/ST9.jpg", 298, 430, "ST", "IC9");
+			
+		}
+		
+		function TSsel(){
+			document.getElementById('selImpClass').innerHTML = "Technological Superiority";
+			replace_image("files/ImpClass/TS1.jpg", 298, 430, "TS", "IC1");
+			replace_image("files/ImpClass/TS2.jpg", 298, 430, "TS", "IC2");
+			replace_image("files/ImpClass/TS3.jpg", 298, 430, "TS", "IC3");
+			replace_image("files/ImpClass/TS4.jpg", 298, 430, "TS", "IC4");
+			replace_image("files/ImpClass/TS5.jpg", 298, 430, "TS", "IC5");
+			replace_image("files/ImpClass/TS6.jpg", 298, 430, "TS", "IC6");
+			replace_image("files/ImpClass/TS7.jpg", 298, 430, "TS", "IC7");
+			replace_image("files/ImpClass/TS8.jpg", 298, 430, "TS", "IC8");
+			replace_image("files/ImpClass/TS9.jpg", 298, 430, "TS", "IC9");
+		}
+		
+		//
+		//END IMPERIAL CLASS SECTION
+		//
+		
+		
+		//MODAL SECTION BEGIN
+		//
+		
+		// Get the modal
+		var modal = document.getElementById('myModal');
+		// Get the button that opens the modal
+		var btn = document.getElementById("myBtn");
+		// Get the <span> element that closes the modal
+		var span = document.getElementsByClassName("close")[0];
+		// When the user clicks on the button, open the modal 
+		btn.onclick = function() {
+			modal.style.display = "block";
+		}
+		// When the user clicks on <span> (x), close the modal
+		span.onclick = function() {
+			modal.style.display = "none";
+		}
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		}
+		//END MODAL SECTION
+		//
+		
+		//Loadout Modal
+		var loadoutModal = document.getElementById('loadoutModal');
+		// Get the button that opens the modal
+		var loadoutBtn = document.getElementById("loadoutBtn");
+		// Get the <span> element that closes the modal
+		var loadoutSpan = document.getElementsByClassName("close")[1];
+		// When the user clicks on the button, open the modal 
+		loadoutBtn.onclick = function() {
+			loadoutModal.style.display = "block";
+		}
+		// When the user clicks on <span> (x), close the modal
+		loadoutSpan.onclick = function() {
+			loadoutModal.style.display = "none";
+		}
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+			if (event.target == loadoutModal) {
+				loadoutModal.style.display = "none";
+			}
+		}
+		
+		//Loadout Logic
+		//Player Exp
+		
+		function playerOneExpInc(){
+			//Did not know javascript takes +=, too late now.
+			playerOneExp = playerOneExp + 1;
+			document.getElementById('playerOneExp').innerHTML = playerOneExp;			
+		}
+		
+		function playerOneExpDec(){
+			//Did not know javascript takes +=, too late now.
+			if (playerOneExp > 0){
+				playerOneExp = playerOneExp - 1;
+			}
+			document.getElementById('playerOneExp').innerHTML = playerOneExp;
+		}
+		
+		function playerTwoExpInc(){
+			//Did not know javascript takes +=, too late now.
+			playerTwoExp = playerTwoExp + 1;
+			document.getElementById('playerTwoExp').innerHTML = playerTwoExp;			
+		}
+		
+		function playerTwoExpDec(){
+			//Did not know javascript takes +=, too late now.
+			if (playerTwoExp > 0){
+				playerTwoExp = playerTwoExp - 1;
+			}
+			document.getElementById('playerTwoExp').innerHTML = playerTwoExp;
+		}
+		
+		function playerThreeExpInc(){
+			//Did not know javascript takes +=, too late now.
+			playerThreeExp = playerThreeExp + 1;
+			document.getElementById('playerThreeExp').innerHTML = playerThreeExp;			
+		}
+		
+		function playerThreeExpDec(){
+			//Did not know javascript takes +=, too late now.
+			if (playerThreeExp > 0){
+				playerThreeExp = playerThreeExp - 1;
+			}
+			document.getElementById('playerThreeExp').innerHTML = playerThreeExp;
+		}
+		
+		function playerFourExpInc(){
+			//Did not know javascript takes +=, too late now.
+			playerFourExp = playerFourExp + 1;
+			document.getElementById('playerFourExp').innerHTML = playerFourExp;			
+		}
+		
+		function playerFourExpDec(){
+			//Did not know javascript takes +=, too late now.
+			if (playerFourExp > 0){
+				playerFourExp = playerFourExp - 1;
+			}
+			document.getElementById('playerFourExp').innerHTML = playerFourExp;
+		}
+		
+		//END PLAYER EXP
+		
+		//Helper to find which list for skills
+		function selectedChar(character){
+		//param character: selected character from drop down
+		//type character: string
+		//returns a list of character skills
+			switch(character) {
+				case "Diala":
+					return Diala;
+					break;
+				case "Fenn":
+					return Fenn;
+					break;
+				case "Gaarkhan":
+					return Gaarkhan;
+					break;
+				case "Gideon":
+					return Gideon;
+					break;
+				case "Jyn":
+					return Jyn;
+					break;
+				case "Mak":
+					return Mak;
+					break;
+				case "Biv":
+					return Biv;
+					break;
+				case "Saska":
+					return Saska;
+					break;
+				case "Loku":
+					return Loku;
+					break;
+				case "MHD":
+					return MHD;
+					break;
+				case "Verena":
+					return Verena;
+					break;
+				case "Davith":
+					return Davith;
+					break;
+				case "Murne":
+					return Murne;
+					break;
+			}
+		}
+		function loadSkills(character, element){
+			//param character: character selected to load skills for
+			//type character: string
+			//param element: element containing skill checkboxes for recursive adding
+			//type element: document element
+			//returns: sets value of element to corresponding skill by index
+			var charSkills = selectedChar(character);
+			for (var i=0, len=element.length; i<len; i++){
+				if (element[i].type == 'checkbox'){
+					element[i].innerHTML = charSkills[i];
+				}
+			}
+		}
+		function selectPOne(){
+			//returns: sets player one skills
+			loadSkills(document.getElementById("charSelect1").value, document.getElementById("playerOneSkills"));
+		}
+		
+		//mission Modal
+		var missionModal = document.getElementById('missionModal');
+		// Get the button that opens the modal
+		var missionBtn = document.getElementById("missionBtn");
+		// Get the <span> element that closes the modal
+		var missionSpan = document.getElementsByClassName("close")[2];
+		// When the user clicks on the button, open the modal 
+		missionBtn.onclick = function() {
+			missionModal.style.display = "block";
+		}
+		// When the user clicks on <span> (x), close the modal
+		missionSpan.onclick = function() {
+			missionModal.style.display = "none";
+		}
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+			if (event.target == missionModal) {
+				missionModal.style.display = "none";
+			}
+		}
+		
+		
+		
+		//Reference Modal
+		var referenceModal = document.getElementById('referenceModal');
+		// Get the button that opens the modal
+		var referenceBtn = document.getElementById("referenceBtn");
+		// Get the <span> element that closes the modal
+		var referenceSpan = document.getElementsByClassName("close")[3];
+		// When the user clicks on the button, open the modal 
+		referenceBtn.onclick = function() {
+			referenceModal.style.display = "block";
+		}
+		// When the user clicks on <span> (x), close the modal
+		referenceSpan.onclick = function() {
+			referenceModal.style.display = "none";
+		}
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+			if (event.target == referenceModal) {
+				referenceModal.style.display = "none";
+			}
+		}
+		
+		
+	</script>
+
+</body>
+</html>
