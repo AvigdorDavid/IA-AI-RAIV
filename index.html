@@ -1999,7 +1999,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 			//if so, top card is popped and displayed
 			if (deck[0]){
 				var poppedItem = String(deck.pop());
-				var imgSrc = "files/AE/" + poppedItem + ".jpg";
+				var imgSrc = "files/Event/" + poppedItem + ".jpg";
 				//HIDING DISPLAY LINE FOR DEBUG
 				//document.getElementById('demo').innerHTML = deck;
 				replace_image(imgSrc, 335, 523, imgSrc, "currentBlitzImg");
@@ -2013,7 +2013,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 			deck = savedBlitzDeck.slice(0);
 			//HIDING LINE USED FOR DEBUG
 			//document.getElementById('demo').innerHTML = deck;
-			document.getElementById('blitzShuffleStatus').innerHTML = "AE cards Shuffled!";
+			document.getElementById('blitzShuffleStatus').innerHTML = "Event cards Shuffled!";
 		}
 		
 		function blitzInc(){
