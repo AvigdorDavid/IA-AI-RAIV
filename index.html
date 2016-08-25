@@ -70,13 +70,13 @@ AGENT CARDS
 		<td>
 			<div id="blitz" class="col">
 				<div class="shaded">
-					<h3 class="title center"> Drawn Event Card: </h3>
+					<h3 class="title center"> Drawn Automated Emperor/Blitz Card: </h3>
 				</div>
 				<br>
 				<div class="buttonCenter">
 					<form id="blitzDraw" action="#" method="post" onsubmit="return false">
-						<button onClick="displayBlitzCards()">Draw Event Card</button>
-						<button onClick="shuffleBlitzCards()">Reshuffle Event deck</button>
+						<button onClick="displayBlitzCards()">Draw Automated Emperor Card</button>
+						<button onClick="shuffleBlitzCards()">Reshuffle Automated Emperor deck</button>
 					</form>
 				</div>
 
@@ -94,7 +94,7 @@ AGENT CARDS
 					</form>
 				</div>
 				<br>
-				<img id="currentBlitzImg" class="center" alt="Event Card">
+				<img id="currentBlitzImg" class="center" alt="Automated Emperor Card">
 			</div>
 		</td>
 	</tr>
@@ -1336,7 +1336,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 		
 		//blitz cards filenames
 		var blitzCards = ["Blitz 1","Blitz 2","Blitz 3","Blitz 4","Blitz 5", "Blitz 6","Blitz 7","Blitz 8","Blitz 9","Blitz 10"];
-		var blitzColors = ["Event"];
+		var blitzColors = ["Blue", "Gold", "Green", "Red"];
 		//Include multiples if multiple in set
 		//deployment card sets
 		var coreImpBelow6Standard = ["ProbeDroid","ProbeDroid","Stormtrooper","Stormtrooper","ImpOfficer","ImpOfficer","EWebEngi","ELImpOfficer","ELProbeDroid"];
@@ -1444,7 +1444,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 		
 			//Load up blitz color focus cards
 			for (var i=0; i<blitzColors.length; i++){
-				for (var j=1; j<26; j++){
+				for (var j=1; j<7; j++){
 					deck.push(String(blitzColors[i]) + " " + String(j));
 				}
 			}
@@ -1985,7 +1985,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 			//if so, top card is popped and displayed
 			if (deck[0]){
 				var poppedItem = String(deck.pop());
-				var imgSrc = "files/Event/" + poppedItem + ".jpg";
+				var imgSrc = "files/AE/" + poppedItem + ".jpg";
 				//HIDING DISPLAY LINE FOR DEBUG
 				//document.getElementById('demo').innerHTML = deck;
 				replace_image(imgSrc, 335, 523, imgSrc, "currentBlitzImg");
@@ -2015,7 +2015,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 		function blitzDec(){
 			//returns: decrease the blitz threat level
 			//Did not know javascript takes +=, too late now.
-			if (blitzCardsInt > 1{
+			if (blitzCardsInt > 2){
 				blitzCardsInt = blitzCardsInt - 1;
 				blitzReadjust();
 			}
@@ -2040,7 +2040,7 @@ PLACE INSTRUCTIONS ON HOW TO USE HERE!!!!
 		
 			//Load up blitz color focus cards; always same amount
 			for (var i=0; i<blitzColors.length; i++){
-				for (var j=1; j<26; j++){
+				for (var j=1; j<7; j++){
 					deck.push(String(blitzColors[i]) + " " + String(j));
 				}
 			}
